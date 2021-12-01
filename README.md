@@ -17,38 +17,38 @@ https://adventofcode.com
 
 ```json
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Run current file",
-            "program": "${workspaceFolder}/target/debug/${fileBasenameNoExtension}",
-            "args": [],
-            "cwd": "${workspaceFolder}",
-            "preLaunchTask": "cargo",
-            "sourceLanguages": ["rust"]
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Run current file",
+      "program": "${workspaceFolder}/target/debug/${fileBasenameNoExtension}",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "cargo",
+      "sourceLanguages": ["rust"]
+    }
+  ]
 }
 ```
 
 .vscode/tasks.json :
 ```json
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "cargo",
-			"type": "shell",
-			"command": "cargo build",
-			"args": [],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "cargo",
+      "type": "shell",
+      "command": "cargo build",
+      "args": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
 }
 
 
