@@ -1,0 +1,22 @@
+[package]
+name = "hello_world"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "chall1"
+path = "src/day1/chall1.rs"
+test = false
+bench = false
+
+
+# Add new scripts
+# [[bin]]
+# name = "chall2"
+# path = "src/day2/chall2.rs"
+# test = false
+# bench = false
+
+[dependencies]
