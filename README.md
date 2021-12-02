@@ -13,7 +13,15 @@ https://adventofcode.com
 
 ## VS Code config to Run rust as scripts :
 
-.vscode/launch.json : 
+### Install extensions
+
+- Rust-lang : `ext install rust-lang.rust`
+- CodeLLDB
+- Better TOML
+
+### Add local vscode config
+
+.vscode/launch.json :
 
 ```json
 {
