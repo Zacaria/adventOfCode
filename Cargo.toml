@@ -13,10 +13,11 @@ bench = false
 
 
 # Add new scripts
-# [[bin]]
-# name = "chall2"
-# path = "src/day2/chall2.rs"
-# test = false
-# bench = false
+[[bin]]
+name = "chall2"
+path = "src/day1/chall2.rs"
+test = false
+bench = false
 
 [dependencies]
+itertools = "0.10.1"
