@@ -11,11 +11,15 @@ path = "src/day1/chall1.rs"
 test = false
 bench = false
 
-
-# Add new scripts
 [[bin]]
 name = "chall2"
 path = "src/day1/chall2.rs"
+test = false
+bench = false
+
+[[bin]]
+name = "day2chall1" # name and file name have to be the same
+path = "src/day2/day2chall1.rs"
 test = false
 bench = false
 
