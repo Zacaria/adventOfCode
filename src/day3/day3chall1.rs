@@ -1,21 +1,6 @@
 use std::fs::File;
 use std::io::{self, prelude::*, BufReader};
 
-fn to_u32(slice: &[u8]) -> u32 {
-  // should check that slice length is no more than 32
-  // slice.len() <= 32
-  slice.iter().fold(0, |result, &bit| {
-    // Ex result = 00110
-    // result << 1 => 01100
-    // ^ is OR, so it sets the bit at that place without affecting the rest of bits
-    // 01100 ^ 1 => 01101
-    // it's shifting everything to the left (result << 1) and placing a bit at the end (bits ^ 1)
-    (result << 1) ^ bit as u32
-
-    // println!("{:b}", result) // to print result in binary representation
-  })
-}
-
 fn main() -> io::Result<()> {
   let file = File::open("src/day3/input.txt")?;
   let reader = BufReader::new(file);
@@ -40,8 +25,8 @@ fn main() -> io::Result<()> {
     gamma[index] = if has_more_one { 0 } else { 1 };
   }
 
-  let e = to_u32(&epsilon);
-  let g = to_u32(&gamma);
+  let e = utils::to_u32(&epsilon);
+  let g = utils::to_u32(&gamma);
 
   println!(
     "total {} - counter {:?} - epsilon {:?}  - gamma {:?}",
