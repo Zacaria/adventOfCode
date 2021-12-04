@@ -1,4 +1,5 @@
-// pub mod utils;
+use std::fs::File;
+use std::io::{prelude::*, BufReader, Lines};
 
 pub fn to_u32(slice: &[u8]) -> u32 {
   // should check that slice length is no more than 32
@@ -13,5 +14,11 @@ pub fn to_u32(slice: &[u8]) -> u32 {
 
     // println!("{:b}", result) // to print result in binary representation
   })
+}
+
+pub fn get_lines(file_path: &str) -> Vec<String> {
+  let file = File::open(file_path);
+  let reader = BufReader::new(file.unwrap());
+  reader.lines().map(|x| x.unwrap()).collect()
 }
 

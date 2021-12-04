@@ -1,15 +1,13 @@
-use std::fs::File;
-use std::io::{self, prelude::*, BufReader};
+use std::io;
 
 fn main() -> io::Result<()> {
-  let file = File::open("src/day3/input.txt")?;
-  let reader = BufReader::new(file);
+  let lines = utils::get_lines("src/day3/input.txt");
 
   let mut bits_counter: [i32; 12] = [0; 12];
   let mut total_lines = 0;
 
-  for line in reader.lines() {
-    for (index, bit) in line.unwrap().chars().enumerate() {
+  for line in lines {
+    for (index, bit) in line.chars().enumerate() {
       if bit.to_digit(10).unwrap() == 1 {
         bits_counter[index] += 1;
       }
