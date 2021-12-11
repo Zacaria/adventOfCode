@@ -42,8 +42,8 @@ test = false
 bench = false
 
 [[bin]]
-name = "day4chall1"
-path = "src/day4/day4chall1.rs"
+name = "day4chall1_2"
+path = "src/day4/day4chall1_2.rs"
 test = false
 bench = false
 

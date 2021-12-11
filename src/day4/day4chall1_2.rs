@@ -44,7 +44,7 @@ fn mark<T: Copy + PartialEq> (grid: &mut Grid<Cell<T>>, value: T) -> Option<Coor
   None
 }
 
-fn is_complete<T> (grid: &Grid<Cell<T>>, coords: Coord) -> bool {
+fn is_complete_from_coords<T> (grid: &Grid<Cell<T>>, coords: &Coord) -> bool {
   let is_line_complete = grid.iter_row(coords.row)
     .all(|x| match x {
       Cell::Marked(_) => true,
@@ -57,6 +57,30 @@ fn is_complete<T> (grid: &Grid<Cell<T>>, coords: Coord) -> bool {
     });
 
   is_column_complete || is_line_complete
+}
+
+fn is_complete<T> (grid: &Grid<Cell<T>>) -> bool {
+  for r in 0..grid.rows() {
+    let is_line_complete = grid.iter_row(r)
+      .all(|x| match x {
+        Cell::Marked(_) => true,
+        _ => false
+      });
+    if is_line_complete {
+      return true
+    }
+  }
+  for c in 0..grid.cols() {
+    let is_col_complete = grid.iter_col(c)
+      .all(|x| match x {
+        Cell::Marked(_) => true,
+        _ => false
+      });
+    if is_col_complete {
+      return true
+    }
+  }
+  return false
 }
 
 fn grid_value (grid: &Grid<Cell<u32>>, last_marked: u32) -> u32 {
@@ -101,19 +125,30 @@ fn main () -> utils::Result<()> {
     .map(|l| l.parse::<u32>().unwrap())
     .collect();
 
+  let mut first_grid = None;
+  let mut last_grid = None;
   for instruction in instructions {
     for grid in grids.iter_mut() {
+      if is_complete(grid) {
+        continue
+      }
       let coords = mark(grid, instruction);
       match coords {
         None => continue,
         _ => ()
       }
-      if is_complete(grid, coords.unwrap()) {
-        println!("found {}", grid_value(grid, instruction));
-        return Ok(());
+      let u_coords = coords.unwrap();
+      if is_complete_from_coords(grid, &u_coords) {
+        if first_grid == None {
+          first_grid = Some(grid_value(grid, instruction));
+        }
+        last_grid = Some(grid_value(grid, instruction));
       }
     }
   }
+
+  println!("found first grid : {}", first_grid.unwrap());
+  println!("found last grid : {}", last_grid.unwrap());
 
   Ok(())
 }
