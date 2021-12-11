@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::{prelude::*, BufReader};
 
 pub type BitLine = [u8; 12];
+pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
 pub fn to_u32(slice: &[u8]) -> u32 {
   // should check that slice length is no more than 32

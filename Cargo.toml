@@ -41,9 +41,17 @@ path = "src/day3/day3chall2.rs"
 test = false
 bench = false
 
+[[bin]]
+name = "day4chall1"
+path = "src/day4/day4chall1.rs"
+test = false
+bench = false
+
 [lib]
 name = "utils"
 path = "src/utils.rs"
 
 [dependencies]
 itertools = "0.10.1"
+grid = "0.6.0"
+termion = "*"
