@@ -16,12 +16,12 @@ impl Segment {
   fn line (&self) -> Vec<Point> {
     let mut res: Vec<Point> = Vec::new();
     if self.a.y == self.b.y {
-      for x in self.a.x..self.b.x+1 {
+      for x in if self.a.x < self.b.x { self.a.x..=self.b.x } else { self.b.x..=self.a.x }  {
         res.push(Point{x, y: self.a.y});
       }
     }
     if self.a.x == self.b.x {
-      for y in self.a.y..self.b.y+1 {
+      for y in if self.a.y < self.b.y { self.a.y..=self.b.y } else { self.b.y..=self.a.y } {
         res.push(Point{x: self.a.x, y});
       }
     }
