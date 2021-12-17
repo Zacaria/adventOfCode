@@ -65,6 +65,18 @@ path = "src/day6/day6chall.rs"
 test = false
 bench = false
 
+[[bin]]
+name = "day7chall1"
+path = "src/day7/day7chall1.rs"
+test = false
+bench = false
+
+[[bin]]
+name = "day7chall2"
+path = "src/day7/day7chall2.rs"
+test = false
+bench = false
+
 [lib]
 name = "utils"
 path = "src/utils.rs"
