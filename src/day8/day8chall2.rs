@@ -1,105 +1,76 @@
+// source : https://github.com/schubart/AdventOfCode_2021_Rust/blob/master/day08/src/lib.rs
+#![cfg(test)]
 use std::collections::HashSet;
 
-type DigitDash = Option<char>;
+type Signal = HashSet<char>;
+type Lookup = [Signal; 10];
 
-struct DigitalMap {
-	top: DigitDash,
-	middle: DigitDash,
-	bottom: DigitDash,
-	top_right: DigitDash,
-	top_left: DigitDash,
-	bottom_right: DigitDash,
-	bottom_left: DigitDash
+// If there is exactly one matching element, remove and return it. Else panic.
+fn remove_only<T, F>(input: &mut Vec<T>, predicate: F) -> T
+where
+  T: Clone,
+  F: Fn(&&T) -> bool + Copy,
+{
+  let mut results = input.iter().filter(predicate);
+  let result = results.next().expect("no element found").clone();
+  assert!(results.next().is_none(), "multiple elements found");
+
+  // Vec::drain_filter would be useful here, but don't want to depend on nighly.
+  input.retain(|x| !predicate(&x));
+
+  result
 }
 
-fn decode_line (line: &str) -> i32 {
-	let mut split_line = line.split(" | ");
-	let (code, number) = (split_line.next().unwrap(), split_line.next().unwrap());
+fn decode(input: &mut Vec<Signal>) -> Lookup {
+  // Easy cases.
+  let n1 = remove_only(input, |x| x.len() == 2);
+  let n4 = remove_only(input, |x| x.len() == 4);
+  let n7 = remove_only(input, |x| x.len() == 3);
+  let n8 = remove_only(input, |x| x.len() == 7);
 
-	let one_code = get_word_with_length(code, 2);
-	let four_code = get_word_with_length(code, 4);
-	let seven_code = get_word_with_length(code, 3);
-	let eight_code = get_word_with_length(code, 7);
-	let zero_six_or_nine = get_words_with_length(code, 6);
-	let two_three_or_five = get_words_with_length(code, 5);
+  // 3 is the only 5-segment digit that shares 2 segments with digit 1.
+  // bitwise comparison of HashSet allowed bebsause HashSet implements BitOr trait
+  let n3 = remove_only(input, |x| x.len() == 5 && (*x & &n1).len() == 2);
+  let n2 = remove_only(input, |x| x.len() == 5 && (*x & &n4).len() == 2);
+  // 5 is the only remaining 5-segment digit.
+  let n5 = remove_only(input, |x| x.len() == 5);
 
-	let (top_right, six_code, zero_or_nine) = letter_not_in_code(&zero_six_or_nine, &one_code);
-	let (middle, zero_code, nine_vec) = letter_not_in_code(&zero_or_nine, &four_code);
-	let nine_code = nine_vec[0];
-	12
+  // And so on.
+  let n6 = remove_only(input, |x| x.len() == 6 && (*x & &n1).len() == 1);
+  let n9 = remove_only(input, |x| x.len() == 6 && (*x & &n4).len() == 4);
+  let n0 = remove_only(input, |x| x.len() == 6);
+
+  assert!(input.is_empty());
+
+  [n0, n1, n2, n3, n4, n5, n6, n7, n8, n9]
+}
+
+fn apply(lookup: &Lookup, output: &[Signal]) -> usize {
+  output.iter().fold(0, |result, x| {
+    result * 10
+      + lookup
+        .iter()
+        .enumerate()
+        .find(|(_, y)| x == *y)
+        .map(|(index, _)| index)
+        .unwrap()
+  })
 }
 
 fn main() -> utils::Result<()> {
-	let input = include_str!("input");
+  let result: usize = include_str!("input")
+    .lines()
+    .map(|line| {
+      let mut output: Vec<Signal> = line.split(' ').map(|x| x.chars().collect()).collect();
+      let mut input = output.drain(0..10).collect();
+      output.remove(0); // Remove | separator.
 
-	for line in input.lines() {
-		decode_line(line);
-	}
+      let lookup = decode(&mut input);
+      apply(&lookup, &output)
+    })
+    .sum();
 
-	Ok(())
-}
+  println!("result {}", result);
 
-fn get_words_with_length (code: &str, length: usize) -> Vec<String> {
-	code.split(" ")
-		.filter_map(|word| if word.len() == length {Some(String::from(word))} else {None})
-		.collect::<Vec<String>>()
-}
-
-fn get_word_with_length (code: &str, length: usize) -> String {
-	get_words_with_length(code, length)[0].clone()
-}
-
-// fn find_1 (code: &str, zeroOrSixOrNine: Vec<String>) -> (char, char, String) {
-// 	let oneLetters = get_word_with_length(code, 2);
-// 	let mut six:Option<String> = None;
-// 	let top_right:DigitDash = None;
-// 	let bottom_right:DigitDash = None;
-
-// 	for maybeSix in zeroOrSixOrNine {
-// 		let letters: HashSet<char> = maybeSix.chars().collect();
-// 		if !oneLetters.chars().all(|letter| letters.contains(&letter)) {
-// 			for letters
-// 			six = Some(maybeSix);
-// 			top_right = letters
-// 			continue;
-// 		}
-// 	}
-
-// 	"toto"
-// }
-
-fn find_4 (code: &str) -> String {
-	get_word_with_length(code, 4)
-}
-
-fn find_7 (code: &str) -> String {
-	get_word_with_length(code, 3)
-}
-
-fn find_8 (code: &str) -> String {
-	get_word_with_length(code, 7)
-}
-
-// do unit test
-fn find_char_not_in_string (the_string: String, the_char: char) {
-
-}
-
-fn letter_not_in_code (codes: &Vec<String>, letters: &String) -> (Option<char>, Option<String>, Vec<String>) {
-	let mut found_code: Option<String> = None;
-	let mut found_letter: Option<char> = None;
-	for code in codes {
-		for letter in letters.chars() {
-			if !code.contains(letter) {
-				found_letter = Some(letter);
-				found_code = Some(code.clone());
-				continue;
-			}
-		}
-		if found_code != None {
-			continue;
-		}
-	}
-	let new_codes: Vec<String> = codes.iter().filter(|&code| code.eq(found_code.as_ref().unwrap())).collect();
-	(found_letter, found_code, new_codes)
+  Ok(())
 }
