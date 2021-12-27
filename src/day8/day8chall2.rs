@@ -1,5 +1,4 @@
 // source : https://github.com/schubart/AdventOfCode_2021_Rust/blob/master/day08/src/lib.rs
-#![cfg(test)]
 use std::collections::HashSet;
 
 type Signal = HashSet<char>;
