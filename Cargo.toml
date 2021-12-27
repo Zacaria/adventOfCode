@@ -1,6 +1,6 @@
 [workspace]
 
-members = ["day*"]
+members = ["day*", "utils"]
 
 [package]
 name = "hello_world"
